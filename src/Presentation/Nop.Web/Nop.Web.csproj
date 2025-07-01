@@ -30,7 +30,9 @@
     <Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json" />
     <Content Remove="App_Data\*.json" />
     <Content Remove="App_Data\Installation\SampleData.json" />
+    <Content Remove="bundleconfig.json" />
     <None Include="App_Data\Installation\SampleData.json" />
+    <None Include="bundleconfig.json" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
 
     <Compile Remove="Plugins\**;Themes\**" />
