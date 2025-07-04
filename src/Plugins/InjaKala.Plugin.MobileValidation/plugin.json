@@ -1,0 +1,11 @@
+﻿{
+  "Group": "1_InjaKala",
+  "FriendlyName": "ورود با شماره موبایل",
+  "SystemName": "InjaKalaIR.Plugin.MobileValidation",
+  "Version": "4.60",
+  "SupportedVersions": [ "4.90" ],
+  "Author": "http://InjaKala.ir  (MJ Vakili)",
+  "DisplayOrder": 10,
+  "FileName": "InjaKalaIR.Plugin.MobileValidation.dll",
+  "Description": "This plugin add filter specification & add group."
+}

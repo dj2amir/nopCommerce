@@ -1,0 +1,215 @@
+﻿@{
+    Layout = "_ConfigurePlugin";
+}
+@model ConfigurationModel
+@using InjaKalaIR.Plugin.MobileValidation.Models;
+@using Nop.Web.Framework;
+    
+<form asp-controller="InjaKalaSmsValidation" asp-action="Configure" method="post">
+
+    @*NopHtml.AntiForgeryToken()*@
+    <div class="content">
+        <div class="form-horizontal">
+            @await Component.InvokeAsync("StoreScopeConfiguration")
+            @Html.ValidationSummary(false)
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-md-9">
+                                @if (!string.IsNullOrWhiteSpace(Model.Error))
+                                {
+                                    <div class="message-error">@Model.Error</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-9">
+                                <div class="message-error">
+                                    اطلاعات بیشتر به سایت
+                                    <a href="http://InjaKala.ir">
+                                        ناپ فارسی
+                                    </a>
+                                    مراجعه کنید.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="LineNumber_OverrideForStore" asp-input="LineNumber" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="LineNumber" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="LineNumber" />
+                                <span asp-validation-for="LineNumber"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SmsUsername_OverrideForStore" asp-input="SmsUsername" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SmsUsername" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SmsUsername" />
+                                <span asp-validation-for="SmsUsername"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SmsPassword_OverrideForStore" asp-input="SmsPassword" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SmsPassword" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SmsPassword" />
+                                <span asp-validation-for="SmsPassword"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SmsRemaining_OverrideForStore" asp-input="SmsRemaining" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SmsRemaining" />
+                            </div>
+                            <div class="col-md-9">
+                                @Model.SmsRemaining
+                                <button type="submit" name="SmsRemaining" class="btn btn-info">
+                                    بروزرسانی اعتبار
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-label asp-for="WebServiceSupport" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-select asp-for="WebServiceSupport" asp-items="(IEnumerable<SelectListItem>)ViewBag.webServices" />
+                                <span asp-validation-for="WebServiceSupport"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SmsIsActive_OverrideForStore" asp-input="SmsIsActive" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SmsIsActive" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SmsIsActive" />
+                                <span asp-validation-for="SmsIsActive"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="EnableOtp_OverrideForStore" asp-input="EnableOtp" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="EnableOtp" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="EnableOtp" />
+                                <span asp-validation-for="EnableOtp"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-label asp-for="SmsIsUseCustomLogin" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SmsIsUseCustomLogin" />
+                                <span asp-validation-for="SmsIsUseCustomLogin"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SmsIsSendValidation_OverrideForStore" asp-input="SmsIsSendValidation" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SmsIsSendValidation" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SmsIsSendValidation" />
+                                <span asp-validation-for="SmsIsSendValidation"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SmsEmailOptional_OverrideForStore" asp-input="SmsEmailOptional" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SmsEmailOptional" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SmsEmailOptional" />
+                                <span asp-validation-for="SmsEmailOptional"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="SmsFirstNameOptional_OverrideForStore" asp-input="SmsFirstNameOptional" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="SmsFirstNameOptional" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="SmsFirstNameOptional" />
+                                <span asp-validation-for="SmsFirstNameOptional"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="MobileValidationActiveCode_OverrideForStore" asp-input="MobileValidationActiveCode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="MobileValidationActiveCode" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="MobileValidationActiveCode" />
+                                <span asp-validation-for="MobileValidationActiveCode"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="MobileValidationNewPass_OverrideForStore" asp-input="MobileValidationNewPass" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="MobileValidationNewPass" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="MobileValidationNewPass" />
+                                <span asp-validation-for="MobileValidationNewPass"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <nop-editor asp-for="InjaKala" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input value="@ViewBag.webServiceName" class="form-control text-box single-line" id="webService" />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                &nbsp;
+                            </div>
+                            <div class="col-md-9">
+                                <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</form>
+
+
+
+    <script>
+        $('#InjaKala,#webService').attr('readonly', 'readonly');
+        document.getElementById('SmsPassword').type = 'password';
+    </script>

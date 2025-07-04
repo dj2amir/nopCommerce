@@ -1,0 +1,65 @@
+﻿@model InjaKalaIR.Plugin.MobileValidation.Models.ChangePassword
+@using Nop.Web.Models.Customer;
+@{
+    Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+
+    //title
+   NopHtml.AddTitleParts(T("PageTitle.PasswordRecovery").Text);
+    //page class
+   NopHtml.AppendPageCssClassParts("html-password-recovery-page");
+}
+
+@section left
+{
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = 11 })
+}
+
+
+<div class="page account-page customer-info-page">
+    <div class="page-title">
+        <h1>تغییر کلمه ورود - تلفن همراه</h1>
+    </div>
+    <div class="page-body">
+        @if (!String.IsNullOrEmpty(Model.Result))
+        {
+            <div class="result">
+                @Model.Result
+            </div>
+        }
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <strong class="tooltip">لطفا تلفن همراه جدید را وارد کنید</strong>
+            <div class="fieldset">
+                <div class="form-fields">
+                    <div class="inputs">
+                        @Html.LabelFor(model => model.LastUserName)
+                        @Html.TextBoxFor(model => model.LastUserName, new { @readonly = "readonly", disabled = "disabled" })
+
+                        @Html.ValidationMessageFor(model => model.LastUserName)
+                    </div>
+                    <div class="inputs">
+                        @Html.LabelFor(model => model.UserName)
+                        @Html.TextBoxFor(model => model.UserName)
+
+                        @Html.ValidationMessageFor(model => model.UserName)
+                    </div>
+                    
+                    @if (!string.IsNullOrEmpty(Model.UserName)) { 
+                    <div class="inputs">
+                        @Html.LabelFor(model => model.CodeSend)
+                        @Html.TextBoxFor(model => model.CodeSend)
+
+                        @Html.ValidationMessageFor(model => model.CodeSend)
+                    </div>
+                    }
+                </div>
+                
+
+            </div>
+            <div class="buttons">
+                <input type="submit" name="send-email" class="button-1 password-recovery-button" value="@T("Account.PasswordRecovery.RecoverButton")" />
+            </div>
+        }
+    </div>
+</div>

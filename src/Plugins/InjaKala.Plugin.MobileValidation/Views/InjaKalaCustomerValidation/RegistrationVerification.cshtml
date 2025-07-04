@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+}
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Framework;
+
+<div class="page registration-page">
+    <div class="page-title">
+        <h1>@T("InjaKala.MobileValidation.Fields.Heading")</h1>
+    </div>
+    <div class="page-body">
+        @if (!string.IsNullOrEmpty(ViewBag.result))
+        {
+            @if (ViewBag.redirect != null)
+            {
+                <div class="message-success" style="color:green;">
+                    @ViewBag.result
+                </div>
+            }
+            else
+            {
+                <div class="message-error" style="color:red;">
+                    @ViewBag.result
+                </div>
+            }
+        }
+        @using (Html.BeginForm())
+        {
+
+            <div>
+                کد فعالسازی به موبایل شما ارسال شد. لطفا آن را در کادر زیر وارد کنید.
+            </div>
+
+            <div class="fieldset">
+                <div class="form-fields">
+                    <div class="inputs">
+                        <label style="width: auto;">@T("account.fields.username")</label>
+                        <input id="UserName" name="UserName" type="text" value="@ViewBag.UserName" />
+                        <button id="resendCode" class="button-1 register-next-step-button" type="button">ارسال مجدد کد</button>
+                    </div>
+                    <div class="inputs">
+                        @*<input name="validatinCode" id="validatinCode" />*@
+                        @*@Html.LabelFor(model => model.OneTimePassword)*@
+                        <label style="width: auto;">@T("mobileValidation.fields.codeValidation")</label>
+                        @Html.Editor("validatinCode")
+                        @*@Html.ValidationMessageFor(model => model.OneTimePassword)*@
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="accept-privacy-policy">
+                @*<a href="#" style="text-decoration:underline;" onclick="resendOtp()">@T("Plugins.InjaKala.Sms.Fields.ResendOTP")</a>*@
+            </div>
+            <div class="buttons">
+                <input type="submit" id="verify-button" class="button-1 register-next-step-button" value="تایید" name="verify-button" />
+            </div>
+
+
+        }
+    </div>
+</div>
+<script asp-location="Footer">
+    jQuery(function ($) {
+        $('#UserName').val(localStorage.getItem("myPhone"));
+        $('#resendCode').click(function () {
+            var uu=$('#UserName').val();
+            $.post('/InjaKalaCustomerValidation/InjaKalaResendCode/' + uu, function () {
+                alert('کد مجدد ارسال شد')
+            }).fail(function () {
+                alert('امکان ارسال وجود ندارد')
+            });
+        });
+    });
+</script>
+@if (ViewBag.redirect!=null)
+{
+    <script asp-location="Footer">
+
+        jQuery(function ($) {
+                setInterval(function () {
+                        window.location = "/";
+                }, 3000);
+            
+        });
+    </script>
+}
