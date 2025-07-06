@@ -1,0 +1,98 @@
+@model Nop.Plugin.MultiFactorAuth.OTP.Models.OTPAuthenticationModel
+
+<div class="multi-factor-authentication-provider">
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info">
+            @Model.Message
+        </div>
+    }
+    
+    <div class="card">
+        <div class="card-header">
+            <h5>@T("Plugins.MultiFactorAuth.OTP.MultiFactorAuthenticationMethodDescription")</h5>
+        </div>
+        <div class="card-body">
+            <p>@Model.Instructions</p>
+            
+            <form id="otpForm">
+                <div class="form-group">
+                    <label asp-for="PhoneNumber">@T("Plugins.MultiFactorAuth.OTP.Fields.PhoneNumber"):</label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="09123456789" />
+                    <small class="form-text text-muted">@T("Plugins.MultiFactorAuth.OTP.Fields.PhoneNumber.Hint")</small>
+                    <span asp-validation-for="PhoneNumber"></span>
+                </div>
+                
+                @if (Model.IsEnabled)
+                {
+                    <div class="alert alert-success">
+                        <i class="fa fa-check-circle"></i>
+                        @T("Plugins.MultiFactorAuth.OTP.Enabled")
+                        @if (Model.IsPhoneNumberVerified)
+                        {
+                            <span class="text-success ml-2">
+                                <i class="fa fa-check"></i>
+                                @T("Plugins.MultiFactorAuth.OTP.PhoneNumberVerified")
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-warning ml-2">
+                                <i class="fa fa-warning"></i>
+                                @T("Plugins.MultiFactorAuth.OTP.PhoneNumberNotVerified")
+                            </span>
+                        }
+                    </div>
+                }
+                
+                <div class="form-buttons">
+                    @if (!Model.IsPhoneNumberVerified)
+                    {
+                        <button type="button" id="sendOtp" class="btn btn-primary">
+                            @T("Plugins.MultiFactorAuth.OTP.SendCode")
+                        </button>
+                    }
+                    
+                    <button type="button" id="verifyPhone" class="btn btn-success" style="display: none;">
+                        @T("Plugins.MultiFactorAuth.OTP.VerifyPhone")
+                    </button>
+                    
+                    @if (Model.IsPhoneNumberVerified)
+                    {
+                        <button type="button" id="toggleOtp" class="btn @(Model.IsEnabled ? "btn-danger" : "btn-success")">
+                            @(Model.IsEnabled ? T("Plugins.MultiFactorAuth.OTP.Disable") : T("Plugins.MultiFactorAuth.OTP.Enable"))
+                        </button>
+                        
+                        @if (Model.IsEnabled && !Model.HasBackupCodes)
+                        {
+                            <button type="button" id="generateBackupCodes" class="btn btn-info">
+                                @T("Plugins.MultiFactorAuth.OTP.GenerateBackupCodes")
+                            </button>
+                        }
+                        
+                        @if (Model.HasBackupCodes)
+                        {
+                            <button type="button" id="showBackupCodes" class="btn btn-secondary">
+                                @T("Plugins.MultiFactorAuth.OTP.ShowBackupCodes")
+                            </button>
+                        }
+                    }
+                </div>
+                
+                <div id="otpInput" class="form-group" style="display: none;">
+                    <label>@T("Plugins.MultiFactorAuth.OTP.Fields.OtpCode"):</label>
+                    <input type="text" id="otpCode" class="form-control" placeholder="@T("Plugins.MultiFactorAuth.OTP.Fields.OtpCode.Hint")" maxlength="6" />
+                </div>
+            </form>
+            
+            <!-- Backup Codes Modal -->
+            <div class="modal fade" id="backupCodesModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">@T("Plugins.MultiFactorAuth.OTP.BackupCodes")</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body

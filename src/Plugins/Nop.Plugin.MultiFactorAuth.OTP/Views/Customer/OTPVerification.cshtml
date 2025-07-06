@@ -1,0 +1,145 @@
+@model Nop.Plugin.MultiFactorAuth.OTP.Models.OTPVerificationModel
+
+<div class="multi-factor-verification">
+    <div class="card">
+        <div class="card-header">
+            <h5>????? ???? ?? ????????</h5>
+        </div>
+        <div class="card-body">
+            <p>@Model.Instructions</p>
+            <p>?? ????? ?? ????? <strong>@Model.PhoneNumber</strong> ????? ??.</p>
+            
+            <form id="verificationForm">
+                <div class="form-group">
+                    <label asp-for="OtpCode">?? ?????:</label>
+                    <input asp-for="OtpCode" class="form-control text-center" placeholder="?? ? ????" maxlength="6" autocomplete="off" />
+                    <span asp-validation-for="OtpCode"></span>
+                </div>
+                
+                <div class="form-buttons text-center">
+                    <button type="button" id="verifyOtp" class="btn btn-primary">
+                        ????? ??
+                    </button>
+                    <button type="button" id="resendOtp" class="btn btn-secondary">
+                        ????? ???? ??
+                    </button>
+                </div>
+                
+                @if (Model.CanUseBackupCode)
+                {
+                    <div class="backup-code-section mt-3">
+                        <hr />
+                        <p>??? ?? ???? ??? ?????? ???????</p>
+                        <div class="form-group">
+                            <label asp-for="BackupCode">?? ???????:</label>
+                            <input asp-for="BackupCode" class="form-control text-center" placeholder="?? ? ????" maxlength="8" />
+                        </div>
+                        <button type="button" id="verifyBackupCode" class="btn btn-info">
+                            ??????? ?? ?? ???????
+                        </button>
+                    </div>
+                }
+                
+                @if (Model.RemainingAttempts > 0)
+                {
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            ????? ???? ??????????: @Model.RemainingAttempts
+                        </small>
+                    </div>
+                }
+            </form>
+            
+            <div id="verificationResult" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    var remainingAttempts = @Model.RemainingAttempts;
+    
+    $('#verifyOtp').click(function() {
+        var code = $('#OtpCode').val();
+        if (!code) {
+            showResult('?? ????? ?? ???? ????', 'error');
+            return;
+        }
+        
+        $.post('/Customer/VerifyMultiFactorAuth', { 
+            otpCode: code,
+            provider: 'MultiFactorAuth.OTP'
+        }, function(result) {
+            if (result.success) {
+                showResult('?? ????? ??. ?? ??? ??????...', 'success');
+                setTimeout(function() {
+                    window.location.href = result.redirectUrl || '/';
+                }, 1500);
+            } else {
+                remainingAttempts--;
+                if (remainingAttempts <= 0) {
+                    showResult('?????? ????? ???? ????? ??', 'error');
+                    $('#verifyOtp').prop('disabled', true);
+                } else {
+                    showResult(result.message || '?? ????? ???????', 'error');
+                }
+            }
+        });
+    });
+    
+    $('#verifyBackupCode').click(function() {
+        var code = $('#BackupCode').val();
+        if (!code) {
+            showResult('?? ??????? ?? ???? ????', 'error');
+            return;
+        }
+        
+        $.post('/Customer/VerifyMultiFactorAuth', { 
+            backupCode: code,
+            provider: 'MultiFactorAuth.OTP'
+        }, function(result) {
+            if (result.success) {
+                showResult('?? ??????? ????? ??. ?? ??? ??????...', 'success');
+                setTimeout(function() {
+                    window.location.href = result.redirectUrl || '/';
+                }, 1500);
+            } else {
+                showResult(result.message || '?? ??????? ???????', 'error');
+            }
+        });
+    });
+    
+    $('#resendOtp').click(function() {
+        $.post('/Customer/ResendOtp', {}, function(result) {
+            if (result.success) {
+                showResult('?? ????? ?????? ????? ??', 'success');
+                remainingAttempts = @Model.RemainingAttempts;
+                $('#verifyOtp').prop('disabled', false);
+            } else {
+                showResult(result.message || '??? ?? ????? ???? ??', 'error');
+            }
+        });
+    });
+    
+    // Auto-focus on OTP input
+    $('#OtpCode').focus();
+    
+    // Auto-submit when 6 digits are entered
+    $('#OtpCode').on('input', function() {
+        var value = $(this).val();
+        if (value.length === 6) {
+            setTimeout(function() {
+                $('#verifyOtp').click();
+            }, 500);
+        }
+    });
+    
+    function showResult(message, type) {
+        var alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        $('#verificationResult').html('<div class="alert ' + alertClass + '">' + message + '</div>');
+        setTimeout(function() {
+            $('#verificationResult').empty();
+        }, 5000);
+    }
+});
+</script>

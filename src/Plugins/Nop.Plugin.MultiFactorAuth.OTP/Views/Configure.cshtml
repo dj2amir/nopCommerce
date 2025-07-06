@@ -1,0 +1,364 @@
+﻿@model ConfigurationModel
+@{
+    Layout = "_ConfigurePlugin";
+    ViewBag.PageTitle = T("Plugins.MultiFactorAuth.OTP.ConfigurationTitle").Text;
+}
+
+<form asp-controller="OTP" asp-action="Configure" method="post">
+    <div class="content">
+        <div class="container-fluid">
+
+            <!-- Plugin Information -->
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-mobile-alt"></i>
+                        @T("Plugins.MultiFactorAuth.OTP.ConfigurationTitle")
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>راهنمای پیکربندی:</strong>
+                        <p class="mb-0">
+                            برای استفاده از این افزونه، ابتدا تنظیمات ارائه‌دهنده پیامک را کامل کنید، سپس تنظیمات OTP را انجام دهید.
+                            در نهایت می‌توانید از بخش تست، عملکرد ارسال پیامک را بررسی کنید.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMS Provider Settings -->
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-cogs"></i>
+                        @T("Plugins.MultiFactorAuth.OTP.Configuration.SmsProviderSettings")
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="SmsProviderApiKey" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="SmsProviderApiKey" asp-required="true" />
+                            <span asp-validation-for="SmsProviderApiKey"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="SmsProviderSecretKey" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="SmsProviderSecretKey" asp-required="true" />
+                            <span asp-validation-for="SmsProviderSecretKey"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="SmsProviderBaseUrl" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="SmsProviderBaseUrl" asp-required="true" />
+                            <span asp-validation-for="SmsProviderBaseUrl"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="SmsTemplateId" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="SmsTemplateId" asp-required="true" />
+                            <span asp-validation-for="SmsTemplateId"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="SenderNumber" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="SenderNumber" />
+                            <span asp-validation-for="SenderNumber"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTP Settings -->
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-key"></i>
+                        @T("Plugins.MultiFactorAuth.OTP.Configuration.OtpSettings")
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="OtpCodeLength" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="OtpCodeLength" asp-required="true" />
+                            <span asp-validation-for="OtpCodeLength"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="OtpExpirationMinutes" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="OtpExpirationMinutes" asp-required="true" />
+                            <span asp-validation-for="OtpExpirationMinutes"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="MaxOtpAttempts" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="MaxOtpAttempts" asp-required="true" />
+                            <span asp-validation-for="MaxOtpAttempts"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Settings -->
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-toggle-on"></i>
+                        @T("Plugins.MultiFactorAuth.OTP.Configuration.FeatureSettings")
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="EnableForLogin" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="EnableForLogin" />
+                            <span asp-validation-for="EnableForLogin"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="EnableForRegistration" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="EnableForRegistration" />
+                            <span asp-validation-for="EnableForRegistration"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test SMS Settings -->
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-paper-plane"></i>
+                        @T("Plugins.MultiFactorAuth.OTP.Configuration.TestSettings")
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>توجه:</strong>
+                        برای تست ارسال پیامک، ابتدا تنظیمات بالا را ذخیره کنید.
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="TestPhoneNumber" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="TestPhoneNumber" placeholder="09xxxxxxxxx" />
+                            <span asp-validation-for="TestPhoneNumber"></span>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.TestResult))
+                    {
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <nop-label asp-for="TestResult" />
+                            </div>
+                            <div class="col-md-9">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    @Model.TestResult
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group row">
+                        <div class="col-md-9 offset-md-3">
+                            <button type="submit" name="test-sms" class="btn btn-info">
+                                <i class="fas fa-paper-plane"></i>
+                                @T("Plugins.MultiFactorAuth.OTP.TestSms")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="card card-default">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-9 offset-md-3">
+                            <button type="submit" name="save" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                @T("Admin.Common.Save")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Phone number validation
+            $('#@Html.IdFor(model => model.TestPhoneNumber)').on('input', function() {
+                var phoneNumber = $(this).val();
+                var phoneRegex = /^09\d{9}$/;
+
+                if (phoneNumber && !phoneRegex.test(phoneNumber)) {
+                    $(this).addClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                    $(this).after('<div class="invalid-feedback">شماره تلفن باید با فرمت 09xxxxxxxxx وارد شود</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                }
+            });
+
+            // URL validation
+            $('#@Html.IdFor(model => model.SmsProviderBaseUrl)').on('input', function() {
+                var url = $(this).val();
+                var urlRegex = /^https?:\/\/.+/;
+
+                if (url && !urlRegex.test(url)) {
+                    $(this).addClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                    $(this).after('<div class="invalid-feedback">آدرس باید با http:// یا https:// شروع شود</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                }
+            });
+
+            // Numeric validation
+            $('#@Html.IdFor(model => model.OtpCodeLength)').on('input', function() {
+                var value = parseInt($(this).val());
+                if (value < 4 || value > 8) {
+                    $(this).addClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                    $(this).after('<div class="invalid-feedback">طول کد OTP باید بین 4 تا 8 رقم باشد</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                }
+            });
+
+            $('#@Html.IdFor(model => model.OtpExpirationMinutes)').on('input', function() {
+                var value = parseInt($(this).val());
+                if (value < 1 || value > 30) {
+                    $(this).addClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                    $(this).after('<div class="invalid-feedback">مدت انقضا باید بین 1 تا 30 دقیقه باشد</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                }
+            });
+
+            $('#@Html.IdFor(model => model.MaxOtpAttempts)').on('input', function() {
+                var value = parseInt($(this).val());
+                if (value < 1 || value > 10) {
+                    $(this).addClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                    $(this).after('<div class="invalid-feedback">حداکثر تلاش باید بین 1 تا 10 باشد</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                }
+            });
+
+            // Template ID validation
+            $('#@Html.IdFor(model => model.SmsTemplateId)').on('input', function() {
+                var value = parseInt($(this).val());
+                if (value <= 0) {
+                    $(this).addClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                    $(this).after('<div class="invalid-feedback">شناسه قالب پیامک باید بزرگتر از 0 باشد</div>');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).siblings('.invalid-feedback').remove();
+                }
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .card-header h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .card-header i {
+            margin-right: 8px;
+            color: #007bff;
+        }
+
+        .alert {
+            border-radius: 6px;
+        }
+
+        .btn {
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+            .btn i {
+                margin-right: 5px;
+            }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .invalid-feedback {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            color: #dc3545;
+        }
+
+        .is-invalid {
+            border-color: #dc3545;
+        }
+
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+    </style>
+}
