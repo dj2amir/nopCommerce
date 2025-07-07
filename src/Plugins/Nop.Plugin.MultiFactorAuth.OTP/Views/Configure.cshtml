@@ -4,11 +4,12 @@
     ViewBag.PageTitle = T("Plugins.MultiFactorAuth.OTP.ConfigurationTitle").Text;
 }
 
+<link rel="stylesheet" href="~/Plugins/MultiFactorAuth.OTP/Views/styles.css" />
+
 <form asp-controller="OTP" asp-action="Configure" method="post">
     <div class="content">
         <div class="container-fluid">
 
-            <!-- Plugin Information -->
             <div class="card card-default">
                 <div class="card-header">
                     <h3 class="card-title">
@@ -28,7 +29,6 @@
                 </div>
             </div>
 
-            <!-- SMS Provider Settings -->
             <div class="card card-default">
                 <div class="card-header">
                     <h3 class="card-title">
@@ -46,7 +46,6 @@
                             <span asp-validation-for="SmsProviderApiKey"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="SmsProviderSecretKey" />
@@ -56,7 +55,6 @@
                             <span asp-validation-for="SmsProviderSecretKey"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="SmsProviderBaseUrl" />
@@ -66,7 +64,6 @@
                             <span asp-validation-for="SmsProviderBaseUrl"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="SmsTemplateId" />
@@ -76,7 +73,6 @@
                             <span asp-validation-for="SmsTemplateId"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="SenderNumber" />
@@ -89,7 +85,6 @@
                 </div>
             </div>
 
-            <!-- OTP Settings -->
             <div class="card card-default">
                 <div class="card-header">
                     <h3 class="card-title">
@@ -107,7 +102,6 @@
                             <span asp-validation-for="OtpCodeLength"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="OtpExpirationMinutes" />
@@ -117,7 +111,6 @@
                             <span asp-validation-for="OtpExpirationMinutes"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="MaxOtpAttempts" />
@@ -130,7 +123,6 @@
                 </div>
             </div>
 
-            <!-- Feature Settings -->
             <div class="card card-default">
                 <div class="card-header">
                     <h3 class="card-title">
@@ -148,7 +140,6 @@
                             <span asp-validation-for="EnableForLogin"></span>
                         </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="EnableForRegistration" />
@@ -161,7 +152,6 @@
                 </div>
             </div>
 
-            <!-- Test SMS Settings -->
             <div class="card card-default">
                 <div class="card-header">
                     <h3 class="card-title">
@@ -175,7 +165,6 @@
                         <strong>توجه:</strong>
                         برای تست ارسال پیامک، ابتدا تنظیمات بالا را ذخیره کنید.
                     </div>
-
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="TestPhoneNumber" />
@@ -185,7 +174,6 @@
                             <span asp-validation-for="TestPhoneNumber"></span>
                         </div>
                     </div>
-
                     @if (!string.IsNullOrEmpty(Model.TestResult))
                     {
                         <div class="form-group row">
@@ -200,7 +188,6 @@
                             </div>
                         </div>
                     }
-
                     <div class="form-group row">
                         <div class="col-md-9 offset-md-3">
                             <button type="submit" name="test-sms" class="btn btn-info">
@@ -212,7 +199,6 @@
                 </div>
             </div>
 
-            <!-- Save Button -->
             <div class="card card-default">
                 <div class="card-body">
                     <div class="form-group row">
@@ -230,135 +216,4 @@
     </div>
 </form>
 
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            // Phone number validation
-            $('#@Html.IdFor(model => model.TestPhoneNumber)').on('input', function() {
-                var phoneNumber = $(this).val();
-                var phoneRegex = /^09\d{9}$/;
-
-                if (phoneNumber && !phoneRegex.test(phoneNumber)) {
-                    $(this).addClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                    $(this).after('<div class="invalid-feedback">شماره تلفن باید با فرمت 09xxxxxxxxx وارد شود</div>');
-                } else {
-                    $(this).removeClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                }
-            });
-
-            // URL validation
-            $('#@Html.IdFor(model => model.SmsProviderBaseUrl)').on('input', function() {
-                var url = $(this).val();
-                var urlRegex = /^https?:\/\/.+/;
-
-                if (url && !urlRegex.test(url)) {
-                    $(this).addClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                    $(this).after('<div class="invalid-feedback">آدرس باید با http:// یا https:// شروع شود</div>');
-                } else {
-                    $(this).removeClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                }
-            });
-
-            // Numeric validation
-            $('#@Html.IdFor(model => model.OtpCodeLength)').on('input', function() {
-                var value = parseInt($(this).val());
-                if (value < 4 || value > 8) {
-                    $(this).addClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                    $(this).after('<div class="invalid-feedback">طول کد OTP باید بین 4 تا 8 رقم باشد</div>');
-                } else {
-                    $(this).removeClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                }
-            });
-
-            $('#@Html.IdFor(model => model.OtpExpirationMinutes)').on('input', function() {
-                var value = parseInt($(this).val());
-                if (value < 1 || value > 30) {
-                    $(this).addClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                    $(this).after('<div class="invalid-feedback">مدت انقضا باید بین 1 تا 30 دقیقه باشد</div>');
-                } else {
-                    $(this).removeClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                }
-            });
-
-            $('#@Html.IdFor(model => model.MaxOtpAttempts)').on('input', function() {
-                var value = parseInt($(this).val());
-                if (value < 1 || value > 10) {
-                    $(this).addClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                    $(this).after('<div class="invalid-feedback">حداکثر تلاش باید بین 1 تا 10 باشد</div>');
-                } else {
-                    $(this).removeClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                }
-            });
-
-            // Template ID validation
-            $('#@Html.IdFor(model => model.SmsTemplateId)').on('input', function() {
-                var value = parseInt($(this).val());
-                if (value <= 0) {
-                    $(this).addClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                    $(this).after('<div class="invalid-feedback">شناسه قالب پیامک باید بزرگتر از 0 باشد</div>');
-                } else {
-                    $(this).removeClass('is-invalid');
-                    $(this).siblings('.invalid-feedback').remove();
-                }
-            });
-        });
-    </script>
-}
-
-@section Styles {
-    <style>
-        .card-header h3 {
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .card-header i {
-            margin-right: 8px;
-            color: #007bff;
-        }
-
-        .alert {
-            border-radius: 6px;
-        }
-
-        .btn {
-            border-radius: 4px;
-            font-weight: 500;
-        }
-
-            .btn i {
-                margin-right: 5px;
-            }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .invalid-feedback {
-            display: block;
-            margin-top: 0.25rem;
-            font-size: 0.875rem;
-            color: #dc3545;
-        }
-
-        .is-invalid {
-            border-color: #dc3545;
-        }
-
-        .card {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            border: 1px solid rgba(0, 0, 0, 0.125);
-        }
-    </style>
-}
+<script asp-location="Footer" src="~/Plugins/MultiFactorAuth.OTP/Views/scripts.js"></script>
