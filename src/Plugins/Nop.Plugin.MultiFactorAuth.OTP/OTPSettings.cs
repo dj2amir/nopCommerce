@@ -8,12 +8,12 @@ namespace Nop.Plugin.MultiFactorAuth.OTP;
 public class OTPSettings : ISettings
 {
     /// <summary>
-    /// Gets or sets the SMS provider API key
+    /// Gets or sets the SMS provider API key (X-API-KEY for SMS.ir)
     /// </summary>
     public string SmsProviderApiKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the SMS provider secret key
+    /// Gets or sets the SMS provider secret key (deprecated - not used with new SMS.ir API)
     /// </summary>
     public string SmsProviderSecretKey { get; set; } = string.Empty;
 
